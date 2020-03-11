@@ -1,0 +1,8 @@
+.DS_Store
+config/docker/node/node_modules*
+!.gitkeep
+app/user/
+tmp
+.idea
+log
+node_module/

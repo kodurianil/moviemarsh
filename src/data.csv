@@ -1,0 +1,12 @@
+0.12-5.22|horse|0kmph,,
+8.18-9.24|bike|30kmph,,
+9.24-12.28|horse|0kmph,,
+12.29-16.13|bike|30kmph,,
+16.13-22.04|horse|0kmph,,
+22.04-26.05|bike|24kmph,,
+26.05-38.28|bike,horse|18.3kmph,
+38.18-41.11|gun,bike,horse|10kmph
+41.11-47.55|bike,horse|24kmph,
+47.55-49.20|gun,bike,horse|19.4kmph
+48.33-49.50|dash,bike,horse|22.6kmph
+49.20-58.00|horse|0kmph,,

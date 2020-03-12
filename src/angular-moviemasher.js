@@ -112,13 +112,13 @@
       $httpProvider.defaults.withCredentials = true;
       //delete $httpProvider.defaults.headers.common['X-Requested-With'];
       $routeProvider
-      .when("/", {
-        templateUrl : "views/ami-ui-template.html"
-      })
-      .when("/inventory-info", {
-        templateUrl : "views/inventory-info.html",
-        controller: "inventoryInfo"
-      })
+        .when("/", {
+          templateUrl: "views/ami-ui-template.html"
+        })
+        .when("/inventory-info", {
+          templateUrl: "views/inventory-info.html",
+          controller: "inventoryInfo"
+        })
     }
   ]);// CONFIG CORS
   module.constant('amm_resources', {});
@@ -178,27 +178,43 @@
       });
       $provide.service('$amm', service);
     }
-  ]); // $amm
-  module.controller('inventoryInfo', ['$scope', '$http', function($scope, $http) {
-    $scope.inventoryList = [];
+  ]);
+  module.directive('ngFiles', ['$parse', function ($parse) {
 
-    // $scope
-    function init() {
-      $http.get('../src/song_data.json').then(function(res) {
-        $scope.inventoryList = res.data;
-        console.log(res.data);
+    function fn_link(scope, element, attrs) {
+      var onChange = $parse(attrs.ngFiles);
+      element.on('change', function (event) {
+        console.log(event.target.files);
+        onChange(scope, { $files: event.target.files });
       });
-    }
+    };
 
-    init();
+    return {
+      link: fn_link
+    }
   }])
+  module.controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
+    var $ctrl = this;
+    $ctrl.items = items;
+    $ctrl.selected = {
+      item: $ctrl.items[0]
+    };
+  
+    $ctrl.ok = function () {
+      $uibModalInstance.close($ctrl.selected.item);
+    };
+  
+    $ctrl.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+  });
   module.directive('ammUi', ['$amm', 'amm_resources', '$resource', function ($amm, amm_resources, $resource) {
     return {
       templateUrl: 'views/ui.html',
       restrict: 'AEC',
       controller: [
-        '$scope', '$window', '$interval', 'amm_resources', '$csv', '$http',
-        function ($scope, $window, $interval, amm_resources, $csv, $http) {
+        '$scope', '$window', '$interval', 'amm_resources', '$csv', '$http', '$uibModal',
+        function ($scope, $window, $interval, amm_resources, $csv, $http, $uibModal) {
           $scope.amm_resources = amm_resources;
           $scope.mashInfo = [];
           var __action_index = -1;
@@ -212,11 +228,36 @@
           $scope.amm_export_displayed_status = function () {
             $scope.amm_export_completed = 0;
           };
+          $scope.open = function (size, parentSelector) {
+            var parentElem = parentSelector ? 
+              angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+            var modalInstance = $uibModal.open({
+              animation: true,
+              ariaLabelledBy: 'modal-title',
+              ariaDescribedBy: 'modal-body',
+              templateUrl: 'myModalContent.html',
+              controller: 'ModalInstanceCtrl',
+              controllerAs: '$ctrl',
+              size: size,
+              appendTo: parentElem,
+              resolve: {
+                items: function () {
+                  return ['a', 'b', 'c'];
+                }
+              }
+            });
+        
+            modalInstance.result.then(function (selectedItem) {
+              console.log(selectedItem);
+            }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+            });
+          };
           $scope.button1 = function () {
             $http.get('../src/data.csv').then((data) => {
               // const info = $csv.convertStringToJson(data.data);
               console.log(data.data);
-              var rows  = data.data.match(/[^\r\n]+/g);
+              var rows = data.data.match(/[^\r\n]+/g);
 
               // Get headers from first row
               // headers   = rows[0].split(',');
@@ -231,13 +272,13 @@
                 'kmph'
               ]
               for (var i = 0; i < rows.length; i++) {
-                var params  = [];
+                var params = [];
                 var element = {};
-                params  = rows[i].split('|');
+                params = rows[i].split('|');
                 for (var j = 0; j < params.length; j++) {
-                  element[ headers[j]? headers [j] : 'other' ] = params[j];
+                  element[headers[j] ? headers[j] : 'other'] = params[j];
                 }
-                json.push( element );
+                json.push(element);
               }
               console.log(json);
               $scope.mashInfo = json;

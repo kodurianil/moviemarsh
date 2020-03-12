@@ -21,7 +21,7 @@
             <tr ng-repeat="mash in mashInfo">
               <!-- <th scope="row">1</th> -->
               <td>{{mash.timeDuration}}</td>
-              <td>{{mash.objects}}</td>
+              <td ng-click="open()">{{mash.objects}}</td>
               <td>{{mash.kmph}}</td>
             </tr>
           </tbody>

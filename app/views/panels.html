@@ -85,11 +85,12 @@
 <div class='amm-panel amm-inspector-panel'>
   <div class='amm-container'>
     <div class='amm-head'>
-      <span ng-switch="$amm.player.selectedClips.length">
+      <span>AITuneSmith</span>
+      <!-- <span ng-switch="$amm.player.selectedClips.length">
         <span ng-switch-when="0">Editing Mash: {{$amm.player.mash.label}}</span>
         <span ng-switch-when="1">Editing Clip: {{$amm.player.media($amm.player.selectedClip).label}}</span>
         <span ng-switch-default>Multiple Clips Selected</span>
-      </span>
+      </span> -->
     </div>
     <div class='amm-inspector'>
       <div class='amm-inspector-form' ng-include="amm_inspector_include($amm.player.selectedClipOrMash)"></div>
@@ -121,7 +122,7 @@
         Clear
       </button>
       <button type="button" class="btn btn-default btn-sm" ng-click="button1()">
-        Button 1
+        AITuneSmith
       </button>
       <a type="button" class="btn btn-default btn-sm" href="#!/inventory-info">
           Inventory

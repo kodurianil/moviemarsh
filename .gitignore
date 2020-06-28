@@ -5,4 +5,4 @@ app/user/
 tmp
 .idea
 log
-node_module/
+node_modules/
